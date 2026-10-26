@@ -1,0 +1,12 @@
+{
+    "host": "127.0.0.1",
+    "port": 5000,
+    "data_dir": "data",
+    "flush_interval_ms": 500,
+    "reconnect":
+        { 
+            "max_per_hour": 10, 
+            "delay_seconds": 5
+        },
+    "log_level": "DEBUG"
+}
