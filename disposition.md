@@ -8,3 +8,6 @@ Claude was used purely for web style brainstorming and to challenge my prior sof
 - Bootstrap Team. (n.d.). *Get started with Bootstrap* (Version 5.3). Retrieved 26 October 2026,
   from https://getbootstrap.com/docs/5.3/getting-started/introduction/
 - from https://getbootstrap.com/docs/5.3/components/navbar/
+- from https://flask.palletsprojects.com/en/stable/patterns/appfactories/
+- from https://flask.palletsprojects.com/en/stable/blueprints/
+- from https://flaviocopes.com/courses/forms/submit-with-fetch/

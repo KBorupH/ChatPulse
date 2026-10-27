@@ -4,10 +4,19 @@
     <p>One Monitor per channel. </p>
     <div>
         <h2>Start a monitor</h2>
-        <br>
-        <p>platform</p>
-        <p>channel name</p>
-        <p>Start monitor</p>
+        <form method="post" action="{{ url_for('pages.start_monitor') }}">
+            <label class="form-label">Platform
+                <select name="platform" class="form-select">
+                    <option value="twitch">Twitch</option>
+                </select>
+            </label>
+
+            <label class="form-label">Channel
+                <input name="channel" type="text" class="form-control" placeholder="Channel name" required/>
+            </label>
+
+            <button type="submit" class="btn btn-primary" >Start Monitor</button>
+        </form>
     </div>
     <h2>Monitors</h2>
     <!-- something something for each monitor spawn a box -->
