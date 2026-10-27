@@ -1,0 +1,4 @@
+BEGIN TRANSACTION;
+ALTER TABLE message ADD COLUMN reply_to_login TEXT;
+ALTER TABLE message ADD COLUMN reply_to_body TEXT;
+COMMIT;

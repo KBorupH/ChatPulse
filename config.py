@@ -1,5 +1,5 @@
 import json, logging
-DEFAULTS = {"data_dir": "data", "flush_interval_ms": 500, "bots": ["streamelements", "nightbot", "moobot", "fossabot"]}
+DEFAULTS = {"bots": ["streamelements", "nightbot", "moobot", "fossabot"]}
 
 log = logging.getLogger(__name__)
 

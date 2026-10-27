@@ -2,6 +2,7 @@
     "host": "127.0.0.1",
     "port": 5000,
     "data_dir": "data",
+    "sqlite_name": "chatpulse.db",
     "flush_interval_ms": 500,
     "reconnect":
         { 

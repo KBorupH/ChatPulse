@@ -15,14 +15,14 @@ def create_pages(monitor_service: MonitorService) -> Blueprint:
 
     @bp.post("/monitors")
     def start_monitor():
-        channel = request.form["channel"]
+        channel_login = request.form["channel_login"]
         platform = request.form["platform"]
-        monitor_service.start_monitor(platform, channel)
+        monitor_service.start(platform, channel_login)
         return redirect(url_for(".monitors"))
     
     @bp.post("/monitors/<int:monitor_id>/stop")
     def stop_monitor(monitor_id: int):
-        monitor_service.stop_monitor(monitor_id)
+        monitor_service.stop(monitor_id)
         return redirect(url_for(".monitors"))
 
     @bp.route("/live")
