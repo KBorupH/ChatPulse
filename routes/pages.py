@@ -1,7 +1,8 @@
-from flask import Blueprint, render_template, redirect, url_for, request
+from flask import Blueprint, render_template, redirect, url_for, request, abort
 from services.monitor_service import MonitorService
+from services.session_service import SessionService
 
-def create_pages(monitor_service: MonitorService) -> Blueprint:
+def create_pages(monitor_service: MonitorService, session_service: SessionService) -> Blueprint:
     bp = Blueprint("pages", __name__)
     
     @bp.route("/home")
@@ -10,8 +11,7 @@ def create_pages(monitor_service: MonitorService) -> Blueprint:
 
     @bp.route("/")
     def monitors():
-        # fetch actively running monitors
-        return render_template("monitors.html", title="ChatPulse | Monitors")
+        return render_template("monitors.html", title="ChatPulse | Monitors", monitors=monitor_service.running())
 
     @bp.post("/monitors")
     def start_monitor():
@@ -20,25 +20,25 @@ def create_pages(monitor_service: MonitorService) -> Blueprint:
         monitor_service.start(platform, channel_login)
         return redirect(url_for(".monitors"))
     
-    @bp.post("/monitors/<int:monitor_id>/stop")
-    def stop_monitor(monitor_id: int):
-        monitor_service.stop(monitor_id)
+    @bp.post("/monitors/<int:channel_id>/stop")
+    def stop_monitor(channel_id: int):
+        monitor_service.stop(channel_id)
         return redirect(url_for(".monitors"))
 
     @bp.route("/live")
     def livechat():
-        return render_template("live_chat.html", title="ChatPulse | Live Chat")
+        return render_template("live_chat.html", title="ChatPulse | Live Chat", monitors=monitor_service.running())
 
     @bp.route("/sessions")
     def sessions():
-        # fetch sessions from database
-        return render_template("sessions.html", title="ChatPulse | Sessions")
+        return render_template("sessions.html", title="ChatPulse | Sessions", sessions=session_service.get_all_stats())
 
     @bp.route("/sessions/<int:session_id>")
     def session_details(session_id: int):
-        #fetch session details with id
-        session_name = "streamer"
-        session_date = "26th of Oct"
-        return render_template("session_details.html", title=f"ChatPulse | {session_name} {session_date}")
+        details_stats = session_service.get_details_stats(session_id)
+        if not details_stats:
+            abort(404)
+            
+        return render_template("session_details.html", title=f"ChatPulse | {details_stats.session_stats.channel.login} {details_stats.session_stats.started_at.date()}", detail=details_stats)
     
     return bp   

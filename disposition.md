@@ -12,3 +12,4 @@ Claude was used purely for web style brainstorming and to challenge my prior sof
 - from https://flask.palletsprojects.com/en/stable/blueprints/
 - from https://flaviocopes.com/courses/forms/submit-with-fetch/
 - from https://docs.python.org/3/library/sqlite3.html#sqlite3-placeholders
+- from https://flask-socketio.readthedocs.io/en/latest/getting_started.html

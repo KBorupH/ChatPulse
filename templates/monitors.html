@@ -18,6 +18,20 @@
             <button type="submit" class="btn btn-primary" >Start Monitor</button>
         </form>
     </div>
-    <h2>Monitors</h2>
-    <!-- something something for each monitor spawn a box -->
+    <h2>Running</h2>
+    {% if not monitors %}
+    <p class="text-body-secondary">No monitors running.</p>
+    {% endif %}
+    {% for m in monitors %}
+    <div class="card-body">
+        <h3>#{{ m.channel_login }}</h3>
+        <span class="badge text-bg-secondary">{{ m.platform_name.title() }}</span>
+        <span class="badge {{ 'text-bg-success' if m.status == 'running' else 'text-bg-danger' }}">
+            {{ m.status.title() }}
+        </span>
+        <form method="post" action="{{ url_for('pages.stop_monitor', channel_id=m.channel_id) }}">
+            <button type="submit" class="btn btn-outline-danger">Stop</button>
+        </form>
+    </div>
+    {% endfor %}
 {% endblock %}

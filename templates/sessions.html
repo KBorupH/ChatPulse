@@ -2,6 +2,46 @@
 {% block content %}
     <h1>Sessions</h1>
     <p>Every monitor is saved as a session. Open one to see its statistics.</p>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Channel</th>
+                    <th scope="col">Platform</th>
+                    <th scope="col">Started</th>
+                    <th scope="col">Duration</th>
+                    <th scope="col" class="text-end">Messages</th>
+                    <th scope="col" class="text-end">Chatters</th>
+                    <th scope="col"><span class="visually-hidden">Open</span></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for s in sessions %}
+                <tr>
+                    <td>#{{ s.channel_login }}</td>
+                    <td><span class="badge text-bg-secondary">{{ s.platform.title() }}</span></td>
+                    <td>{{ s.started_at.astimezone().strftime("%d %b %H:%M")  }}</td>
+                    <td>
+                        {% if s.ended_at %}
+                        {{ s.formatted_duration }}
+                        {% else %}
+                        <span class="badge text-bg-success">Running</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-end">{{ s.messages }}</td>
+                    <td class="text-end">{{ s.chatters }}</td>
+                    <td class="text-end">
+                        <a href="{{ url_for('pages.session_details', session_id=s.id) }}" class="btn btn-sm btn-outline-info">View</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="7" class="text-body-secondary">No sessions yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     <!-- Some way to search or filter on the saved sessions -->
     <!-- Make use of a classic web grid, with clickable headers -->
         <!-- Each row has to be clickable to open their respective session_details -->

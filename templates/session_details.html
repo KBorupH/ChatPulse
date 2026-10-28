@@ -1,4 +1,48 @@
 {% extends "base.html" %}
 {% block content %}
-    <h1>Velkommen til session_details!</h1>
+    <a href="{{ url_for('pages.sessions') }}">&lt- Sessions</a>
+
+    <h1>#{{ detail.session_stats.channel_login }}</h1>
+    <p class="text-body-secondary">
+        {{ detail.session_stats.started_at.astimezone().strftime("%d %b %Y, %H:%M") }}
+        · {{ detail.session_stats.formatted_duration }}
+    </p>
+
+    <table class="table w-auto">
+        <tr><th>Messages</th><td>{{ detail.session_stats.messages }}</td></tr>
+        <tr><th>Unique chatters</th><td>{{ detail.session_stats.chatters }}</td></tr>
+    </table>
+
+    <div class="row mt-4">
+        <div class="col-md">
+            <h5>Top chatters</h5>
+            <table class="table table-sm">
+                {% for c in detail.top_chatters %}
+                <tr><td>{{ c.name }}</td><td class="text-end">{{ c.n }}</td></tr>
+                {% else %}
+                <tr><td class="text-body-secondary">No messages.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md">
+            <h5>Top emotes</h5>
+            <table class="table table-sm">
+                {% for e in detail.top_emotes %}
+                <tr><td>{{ e.name }}</td><td class="text-end">{{ e.n }}</td></tr>
+                {% else %}
+                <tr><td class="text-body-secondary">No emotes used.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+        <div class="col-md">
+            <h5>Messages by role</h5>
+            <table class="table table-sm">
+                {% for r in detail.roles %}
+                <tr><td>{{ r.role }}</td><td class="text-end">{{ r.n }}</td></tr>
+                {% else %}
+                <tr><td class="text-body-secondary">No messages.</td></tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
 {% endblock %}

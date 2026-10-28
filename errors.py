@@ -9,10 +9,10 @@ class MalformedLineError(ChatPulseError):
         self.line = line
         self.reason = reason
         
-class MonitorAlreadyExists(ChatPulseError):
+class MonitorAlreadyRunningError(ChatPulseError):
     """Monitor for platform and channel already exists"""
     
-class MonitorAlreadyStopped(ChatPulseError):
+class MonitorNotRunningError(ChatPulseError):
     """A stop was recieved for a monitor already stopped"""
         
 class UnsupportedPlatformError(ChatPulseError):

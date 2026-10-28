@@ -87,6 +87,7 @@ def _to_message(parsed: dict, raw_line: str) -> Message:
             user_id = tags.get("user-id"),
             display_name = _unescape(tags.get("display-name", "")) or parsed["user"],
             text = text,
+            color = tags.get("color"),
             msg_id = tags.get("id"),
             emotes = _parse_emotes(tags.get("emotes", ""), text),
             bits = int(tags.get("bits", 0)),

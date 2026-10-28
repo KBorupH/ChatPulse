@@ -1,7 +1,21 @@
 {% extends "base.html" %}
 {% block content %}
     <h1>Live Chat</h1>
-    <!-- some settings for style ish -->
-    <!-- panel of chats, to show multiple being monitored -->
-        <!-- each chat has live statistics under it -->
+    {% if not monitors %}
+    <p class="text-body-secondary">No monitors running. <a href="{{ url_for('pages.monitors') }}">Start one</a>.</p>
+    {% endif %}
+    <div class="row">
+        {% for m in monitors %}
+        <section class="card chat-pane" data-channel-id="{{ m.channel_id }}">
+                <header class="card-header d-flex justify-content-between align-items-center">
+                    <h6>#{{ m.channel_login }}</h6>
+                    <span class="badge text-bg-secondary">{{ m.platform_name.title() }}</span>
+                </header>
+                <ol class="messages list-unstyled card-body overflow-auto mb-0" style="height: 60vh"></ol>
+            </section>
+        {% endfor %}
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.8.1/socket.io.min.js"></script>
+    <script src="{{ url_for('static', filename='js/live_chat.js') }}"></script>
 {% endblock %}

@@ -29,6 +29,7 @@ class Message:
     user_id: str
     display_name: str
     text: str
+    color: str | None = None
     msg_id: str | None = None
     emotes: tuple[str, ...] = ()
     bits: int = 0

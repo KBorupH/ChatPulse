@@ -1,7 +1,8 @@
 import sqlite3
+from pathlib import Path
 
 class BaseRepository:
-    def __init__(self, db_path: str):
+    def __init__(self, db_path: Path):
         self._db_path = db_path
     
     def _connect(self) -> sqlite3.Connection:
