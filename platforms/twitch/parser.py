@@ -2,7 +2,7 @@ from errors import MalformedLineError
 from models.message import Message, MessageReply
 from datetime import datetime, timezone
 
-#EXAMPLE DATA USING FOR PARSING LOGIC FOUND UNDER LOGS IN DATA
+#EXAMPLE DATA USING FOR PARSING LOGIC FOUND UNDER LOGS IN DATA AND RAW_LINE IN DB UNDER MESSAGES
 
 CHANNEL_COMMANDS = {"PRIVMSG", "USERNOTICE", "CLEARCHAT", "CLEARMSG", "ROOMSTATE", "JOIN", "PART"}
 _ESCAPES = {r"\s": " ", r"\:": ";", r"\\": "\\", r"\r": "\r", r"\n": "\n"}
@@ -47,19 +47,36 @@ def _parse_ts(tags: dict[str, str]) -> datetime:
     ms = tags.get("tmi-sent-ts")
     if ms is None:
         return datetime.now(timezone.utc)
-    return datetime.fromtimestamp(int(ms) / 1000, tz=timezone.utc)
+    return datetime.fromtimestamp(int(ms) / 1000, tz=timezone.utc) # Twitch sends ts as ms, python works with seconds
 
 def _parse_badges(raw: str) -> dict:
     return {name: version for name, _, version in (b.partition("/") for b in raw.split(",") if b)}
 
+# emotes 
+# example: emotes=emotesv2_a3fa2d01a3084aaeb2208a62d0ed9f31:0-18; 
+# example: emotes=1035663:0-3
+# example: emotes=304985497:11-17,19-25,27-33;
+# example: emotes=emotesv2_c2291016906c49179dc6907b5d6d78d0:0-7/emotesv2_2babf27dc9af406f80ea6b0c1268636e:14-27;
+# structure: emotes=x:n-m
+# x: is id of emote, guarenteed at start
+# :n-m is a splice of text, can appear multiple times with if same emote is placed multiple times in same msg
+# a / signifies a second or more different emotes
 def _parse_emotes(raw: str, text: str) -> tuple[str, ...]:
     names = []
-    for emote in filter(None, raw.split("/")):
+    for emote in filter(None, raw.split("/")):  # filter, equivelant to C# .where, only returns actual values, saves a None check
         _, _, positions = emote.partition(":")
         for pos in positions.split(","):
             start, _, end = pos.partition("-")
             names.append(text[int(start):int(end) + 1])
     return tuple(names)
+
+def _parse_emote_ids(raw: str, text: str) -> dict[str, str]:
+    ids = {}
+    for emote in filter(None, raw.split("/")): # filter, equivelant to C# .where, only returns actual values, saves a None check
+        emote_id, _, positions = emote.partition(":")
+        start, _, end = positions.split(",")[0].partition("-")
+        ids[text[int(start):int(end)+1]] = emote_id
+    return ids
 
 def _parse_reply(tags: dict) -> MessageReply | None:
     if "reply-parent-msg-id" not in tags:
@@ -90,6 +107,7 @@ def _to_message(parsed: dict, raw_line: str) -> Message:
             color = tags.get("color"),
             msg_id = tags.get("id"),
             emotes = _parse_emotes(tags.get("emotes", ""), text),
+            emote_ids = _parse_emote_ids(tags.get("emotes", ""), text),
             bits = int(tags.get("bits", 0)),
             is_broadcaster = "broadcaster" in badges,
             is_mod = tags.get("mod") == "1" or "broadcaster" in badges,

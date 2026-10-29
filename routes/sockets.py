@@ -1,4 +1,4 @@
-from flask_socketio import join_room, leave_room, Namespace
+from flask_socketio import join_room, Namespace
 from models.message import Message
 
 def _room(channel_id: int) -> str:
@@ -15,6 +15,7 @@ def _to_payload(message: Message) -> dict:
         "text": message.text,
         "color": message.color,
         "emotes": list(message.emotes),
+        "emote_ids": message.emote_ids,
         "bits": message.bits,
         "is_broadcaster": message.is_broadcaster,
         "is_mod": message.is_mod,

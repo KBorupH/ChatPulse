@@ -18,5 +18,5 @@ class MonitorNotRunningError(ChatPulseError):
 class UnsupportedPlatformError(ChatPulseError):
     """Platform isn't supported"""
     def __init__(self, platform_name: str):
-            super().__init__(f"platform_name")
+            super().__init__(f"Unsupported platform: {platform_name}")
             self.platform_name = platform_name

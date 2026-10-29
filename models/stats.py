@@ -10,6 +10,7 @@ class SessionStats:
     messages: int
     chatters: int
     started_at: datetime    
+    platform_color: str = ""
     ended_at: datetime | None = None
     
     @property
@@ -37,6 +38,7 @@ class SessionStats:
 @dataclass
 class SessionDetailsStats:
     session_stats: SessionStats
+    per_minute: list[dict]
     top_chatters: list[dict]
     top_emotes: list[dict]
     roles: list[dict]

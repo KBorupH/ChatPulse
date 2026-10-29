@@ -24,13 +24,14 @@ class MonitorService:
     
     def start(self, platform_name: str, channel_login: str):
         channel_login = channel_login.lower()
+        platform = self._get_platform(platform_name)
+        
         # with more time, a unit of work pattern would've been implemented in places like so
         channel_id = self._channel_repo.get_or_create(platform_name, channel_login)
         with self._lock:
             if channel_id in self._monitors:
                 raise MonitorAlreadyRunningError()
             
-            platform = self._get_platform(platform_name)
             session_id = self._session_repo.create(channel_id, datetime.now(timezone.utc))
             
             self._monitors[channel_id] = Monitor(self._configs, session_id, channel_id, channel_login, platform, self._message_repo, self._on_batch)

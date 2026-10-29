@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, redirect, url_for, request, abort
+
 from services.monitor_service import MonitorService
 from services.session_service import SessionService
+from errors import MonitorAlreadyRunningError, MonitorNotRunningError, UnsupportedPlatformError
 
 def create_pages(monitor_service: MonitorService, session_service: SessionService) -> Blueprint:
     bp = Blueprint("pages", __name__)
@@ -11,18 +13,26 @@ def create_pages(monitor_service: MonitorService, session_service: SessionServic
 
     @bp.route("/")
     def monitors():
-        return render_template("monitors.html", title="ChatPulse | Monitors", monitors=monitor_service.running())
+        return render_template("monitors.html", title="ChatPulse | Monitors", monitors=monitor_service.running(), error=request.args.get("error"))
 
     @bp.post("/monitors")
     def start_monitor():
         channel_login = request.form["channel_login"]
         platform = request.form["platform"]
-        monitor_service.start(platform, channel_login)
+        try:
+            monitor_service.start(platform, channel_login)
+        except MonitorAlreadyRunningError:
+            return redirect(url_for(".monitors", error=f"#{channel_login.lower()} is already being monitored"))
+        except UnsupportedPlatformError:
+            return redirect(url_for(".monitors", error=f"{platform} is not supported"))
         return redirect(url_for(".monitors"))
     
     @bp.post("/monitors/<int:channel_id>/stop")
     def stop_monitor(channel_id: int):
-        monitor_service.stop(channel_id)
+        try:
+            monitor_service.stop(channel_id)
+        except MonitorNotRunningError:
+            pass
         return redirect(url_for(".monitors"))
 
     @bp.route("/live")

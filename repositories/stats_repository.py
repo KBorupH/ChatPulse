@@ -2,6 +2,14 @@ from contextlib import closing
 
 from repositories.base_repository import BaseRepository
 
+_PER_MINUTE = """
+SELECT sent_at / 60000 * 60000 as minute, COUNT(*) as count
+FROM message
+WHERE session_id = :session_id
+GROUP BY minute
+ORDER BY minute
+"""
+
 _TOP_CHATTERS = """
 SELECT MAX(display_name) AS name, COUNT(*) AS n
 FROM message
@@ -39,6 +47,7 @@ class StatsRepository(BaseRepository):
         params = {"session_id": session_id}
         with closing(self._connect()) as conn:
             return {
+                "per_minute": _fetch_all(conn, _PER_MINUTE, params),
                 "top_chatters": _fetch_all(conn, _TOP_CHATTERS, params),
                 "top_emotes": _fetch_all(conn, _TOP_EMOTES, params),
                 "roles": _fetch_all(conn, _ROLES, params),

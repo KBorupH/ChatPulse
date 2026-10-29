@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from datetime import datetime
 
 class MessageReply:
@@ -32,6 +32,7 @@ class Message:
     color: str | None = None
     msg_id: str | None = None
     emotes: tuple[str, ...] = ()
+    emote_ids: dict[str, str] = field(default_factory=dict)
     bits: int = 0
     is_broadcaster: bool = False
     is_mod: bool = False

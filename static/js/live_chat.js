@@ -1,3 +1,5 @@
+const TWITCH_EMOTE_URL = "https://static-cdn.jtvnw.net/emoticons/v2/{id}/default/dark/1.0"; //Obviously needs differing logic with proper multi platform support
+
 const MAX_MESSAGES = 300;
 const socket = io();
 const lists = {};
@@ -46,21 +48,46 @@ function renderMessage(msg) {
     const name = document.createElement("strong");
     name.textContent = msg.display_name;
 
-    const userStatus = ""
-    if (msg.is_broadcaster) 
-        userStatus = " [Broadcaster]"
+    const userStatus = document.createElement("strong");
+    if (msg.is_action)
+        userStatus.textContent = " "
+    else if (msg.is_broadcaster) 
+        userStatus.textContent = " [Broadcaster]"
     else if (msg.is_mod) 
-        userStatus = " [Mod]"
+        userStatus.textContent = " [Mod]"
 
-    name.style.color = msg.color || defaultColor(msg.user);
+    name.style.color = msg.color || defaultColor(msg.user_login);
 
-    const text = document.createElement("span");
-    text.textContent = msg.is_action ? ` ${msg.text}` : `${userStatus}: ${msg.text}`;
+    const collonSep =  msg.is_action ? " " : ": ";
+
+    const text = renderText(msg.text, msg.emote_ids)
     if (msg.is_action) 
         text.classList.add("fst-italic");
 
-    li.append(`${time} `, name, text);
+    li.append(`${time} `, name, userStatus, collonSep, text);
     return li;
+}
+
+function renderText(text, emoteIds) {
+    const span = document.createElement("span");
+
+    text.split(" ").forEach((word, i) => {
+        if (i > 0)
+            span.append(" ")
+
+        const id = emoteIds[word];
+        if (!id){
+            span.append(word);
+            return;
+        }
+
+        const img = document.createElement("img");
+        img.src = TWITCH_EMOTE_URL.replace("{id}", encodeURIComponent(id));
+        img.className = "emote"
+        span.append(img);
+    });
+
+    return span;
 }
 
 const DEFAULT_COLORS = [

@@ -19,7 +19,7 @@
                 {% for s in sessions %}
                 <tr>
                     <td>#{{ s.channel_login }}</td>
-                    <td><span class="badge text-bg-secondary">{{ s.platform.title() }}</span></td>
+                    <td><span class="badge" style="background-color: {{ s.platform_color }}">{{ s.platform.title() }}</span></td>
                     <td>{{ s.started_at.astimezone().strftime("%d %b %H:%M")  }}</td>
                     <td>
                         {% if s.ended_at %}
@@ -42,8 +42,4 @@
             </tbody>
         </table>
     </div>
-    <!-- Some way to search or filter on the saved sessions -->
-    <!-- Make use of a classic web grid, with clickable headers -->
-        <!-- Each row has to be clickable to open their respective session_details -->
-    <!-- Classic "Showing x of y sessions" at bottom -->
 {% endblock %}

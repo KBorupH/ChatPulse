@@ -49,6 +49,10 @@ class Monitor:
         return self._platform_base.name
     
     @property
+    def platform_color(self) -> str:
+        return self._platform_base.color
+    
+    @property
     def status(self) -> str:
         return self._status.value
     
@@ -86,9 +90,9 @@ class Monitor:
             self._status = MonitorStatus.STOPPED
         except Exception:
             log.exception("Monitor %s:%s failed", self.platform_name, self._channel_login)
+            self._status = MonitorStatus.FAILED
         finally:
             self._stop_event.set() # stops the flush loop too
-            self._status = MonitorStatus.FAILED
             
         
     

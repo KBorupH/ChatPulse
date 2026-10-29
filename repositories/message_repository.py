@@ -8,7 +8,7 @@ _INSERT = """
 INSERT INTO message (
     session_id, platform_msg_id, sent_at,
     user_login, user_id, display_name,
-    text, color, emotes, bits,
+    text, color, emotes, emote_ids, bits,
     is_broadcaster, is_mod, is_sub, is_first_msg, is_action,
     reply_to_msg_id, reply_to_login, reply_to_body,
     raw_line
@@ -16,7 +16,7 @@ INSERT INTO message (
 VALUES (
     :session_id, :platform_msg_id, :sent_at,
     :user_login, :user_id, :display_name,
-    :text, :color, :emotes, :bits,
+    :text, :color, :emotes, :emote_ids, :bits,
     :is_broadcaster, :is_mod, :is_sub, :is_first_msg, :is_action,
     :reply_to_msg_id, :reply_to_login, :reply_to_body,
     :raw_line
@@ -37,6 +37,7 @@ def _to_row(session_id: int, message: Message) -> dict:
         "text": message.text,
         "color": message.color,
         "emotes": json.dumps(message.emotes),
+        "emote_ids": json.dumps(message.emote_ids),
         "bits": message.bits,
         "is_broadcaster": message.is_broadcaster,
         "is_mod": message.is_mod,

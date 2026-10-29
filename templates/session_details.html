@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% block content %}
-    <a href="{{ url_for('pages.sessions') }}">&lt- Sessions</a>
+    <a href="{{ url_for('pages.sessions') }}" class="btn btn-sm btn-outline-info">&lt- Sessions</a>
 
     <h1>#{{ detail.session_stats.channel_login }}</h1>
+    <h2 class="badge" style="background-color: {{ detail.session_stats.platform_color }}">{{ detail.session_stats.channel.platform.title() }}</h2>
     <p class="text-body-secondary">
         {{ detail.session_stats.started_at.astimezone().strftime("%d %b %Y, %H:%M") }}
         · {{ detail.session_stats.formatted_duration }}
@@ -12,6 +13,17 @@
         <tr><th>Messages</th><td>{{ detail.session_stats.messages }}</td></tr>
         <tr><th>Unique chatters</th><td>{{ detail.session_stats.chatters }}</td></tr>
     </table>
+
+    <div class="mt-4">
+        <h5>Messages per minute</h5>
+        {% if detail.per_minute %}
+        <div class="position-relative" style="height: 300px;">
+            <canvas id="per-minute-chart" data-points='{{ detail.per_minute | tojson }}'></canvas>
+        </div>
+        {% else %}
+        <p class="text-body-secondary">No messages.</p>
+        {% endif %}
+    </div>
 
     <div class="row mt-4">
         <div class="col-md">
@@ -45,4 +57,9 @@
             </table>
         </div>
     </div>
+
+    {% if detail.per_minute %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.js"></script>
+    <script src="{{ url_for('static', filename='js/session_details.js') }}"></script>
+    {% endif %}
 {% endblock %}

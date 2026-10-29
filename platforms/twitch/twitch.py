@@ -17,19 +17,18 @@ PORT = 6667
 NICK = "justinfan12345"  # anonymous read-only login
 READ_TIMEOUT = 360  # Twitch pings about every 5 minutes
 
-
 class Twitch(PlatformBase):
+    name: str = "twitch"
+    color: str = "#A970FF"
+    
     def __init__(self, reconnect_delay: float = 5, max_reconnects_per_hour: int = 10 ) -> None:
+        super().__init__()
         self._reconnect_delay = reconnect_delay
         self._max_reconnects = max_reconnects_per_hour
         self._reconnects: deque[float] = deque()
         self._sock: socket.socket | None = None
         self._closed = threading.Event()
-
-    @property
-    def name(self) -> str:
-        return "twitch"
-
+        
     def read_lines(self, channel: str) -> Iterator[str]:
         channel = channel.lower()
 

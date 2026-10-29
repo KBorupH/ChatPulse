@@ -7,9 +7,12 @@ from pathlib import Path
 import config
 from routes.api import create_api
 from routes.pages import create_pages
+from routes.errors import register_error_handlers
+
 from routes.sockets import ChatSocket
 from services.monitor_service import MonitorService
 from services.session_service import SessionService
+from services.platform_service import PlatformService
 from repositories.session_repository import SessionRepository
 from repositories.channel_repository import ChannelRepository
 from repositories.message_repository import MessageRepository
@@ -34,11 +37,13 @@ channel_repo = ChannelRepository(db_path)
 message_repo = MessageRepository(db_path)
 stats_repo = StatsRepository(db_path)
 
+platform_service = PlatformService()
 monitor_service = MonitorService(configs, session_repo, channel_repo, message_repo, on_batch=chat_socket.emit_messages)
-session_service = SessionService(session_repo, stats_repo)
+session_service = SessionService(platform_service, session_repo, stats_repo)
 
 app.register_blueprint(create_api())
 app.register_blueprint(create_pages(monitor_service, session_service))
+register_error_handlers(app)
 
 if __name__ == "__main__":
     #app.run(debug=True) #Changed to support socket communication
