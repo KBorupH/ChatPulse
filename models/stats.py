@@ -29,7 +29,7 @@ class SessionStats:
 
     @property
     def formatted_duration(self) -> str:
-        if self.duration:
+        if self.duration is not None:
             minutes = int(self.duration.total_seconds()) // 60
             hours, minutes = divmod(minutes, 60)
             return f"{hours}h {minutes:02}m" if hours else f"{minutes}m"
