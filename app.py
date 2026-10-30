@@ -5,7 +5,6 @@ from flask_socketio import SocketIO
 from pathlib import Path
 
 import config
-from routes.api import create_api
 from routes.pages import create_pages
 from routes.errors import register_error_handlers
 
@@ -41,7 +40,6 @@ platform_service = PlatformService()
 monitor_service = MonitorService(configs, session_repo, channel_repo, message_repo, on_batch=chat_socket.emit_messages)
 session_service = SessionService(platform_service, session_repo, stats_repo)
 
-app.register_blueprint(create_api())
 app.register_blueprint(create_pages(monitor_service, session_service))
 register_error_handlers(app)
 

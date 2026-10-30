@@ -1,0 +1,30 @@
+<mxfile host="65bd71144e">
+    <diagram id="1B67Zch9ImUvkz3oycBx" name="Page-1">
+        <mxGraphModel dx="990" dy="532" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="200" pageHeight="100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="senodDqRUc1X6sLua_5s-56" parent="1" style="whiteSpace=wrap;html=1;align=center;" value="Channel" vertex="1">
+                    <mxGeometry height="40" width="100" x="50" y="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="senodDqRUc1X6sLua_5s-60" edge="1" parent="1" source="senodDqRUc1X6sLua_5s-58" style="edgeStyle=none;html=1;endArrow=ERmandOne;endFill=0;startArrow=ERzeroToMany;startFill=0;" target="senodDqRUc1X6sLua_5s-56" value="har">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="senodDqRUc1X6sLua_5s-58" parent="1" style="whiteSpace=wrap;html=1;align=center;" value="Session" vertex="1">
+                    <mxGeometry height="40" width="100" x="50" y="130" as="geometry"/>
+                </mxCell>
+                <mxCell id="senodDqRUc1X6sLua_5s-62" edge="1" parent="1" source="senodDqRUc1X6sLua_5s-59" style="edgeStyle=none;html=1;endArrow=ERmandOne;endFill=0;startArrow=ERzeroToMany;startFill=0;" target="senodDqRUc1X6sLua_5s-58">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="senodDqRUc1X6sLua_5s-63" connectable="0" parent="senodDqRUc1X6sLua_5s-62" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];" value="indeholder" vertex="1">
+                    <mxGeometry relative="1" x="-0.0133" y="-1" as="geometry">
+                        <mxPoint x="-1" as="offset"/>
+                    </mxGeometry>
+                </mxCell>
+                <mxCell id="senodDqRUc1X6sLua_5s-59" parent="1" style="whiteSpace=wrap;html=1;align=center;" value="Message" vertex="1">
+                    <mxGeometry height="40" width="100" x="50" y="230" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
